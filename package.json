@@ -1,0 +1,31 @@
+{
+  "name": "comfyui-ecommerce-pipeline",
+  "version": "1.0.0",
+  "description": "ComfyUI'i API uzerinden suren, e-ticaret urun gorsellerini otomatik isleyen Node.js orchestration servisi (arka plan temizleme + studyo arka plani + upscale).",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "process": "node bin/process-product.js",
+    "batch": "node bin/batch.js",
+    "serve": "node src/server.js",
+    "demo": "node demo/run-demo.js"
+  },
+  "keywords": [
+    "comfyui",
+    "stable-diffusion",
+    "automation",
+    "ecommerce",
+    "image-processing",
+    "api"
+  ],
+  "author": "DevUps",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.17"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "ws": "^8.18.0"
+  }
+}

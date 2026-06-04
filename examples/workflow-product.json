@@ -1,0 +1,49 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": { "image": "urun.png" }
+  },
+  "2": {
+    "class_type": "Image Remove Background (rembg)",
+    "inputs": {
+      "image": ["1", 0],
+      "transparency": true,
+      "model": "u2net",
+      "alpha_matting": true,
+      "alpha_matting_foreground_threshold": 240,
+      "alpha_matting_background_threshold": 10,
+      "alpha_matting_erode_size": 10
+    }
+  },
+  "3": {
+    "class_type": "GetImageSize+",
+    "inputs": { "image": ["1", 0] }
+  },
+  "4": {
+    "class_type": "EmptyImage",
+    "inputs": { "width": ["3", 0], "height": ["3", 1], "batch_size": 1, "color": 16777215 }
+  },
+  "5": {
+    "class_type": "ImageCompositeMasked",
+    "inputs": {
+      "destination": ["4", 0],
+      "source": ["2", 0],
+      "x": 0,
+      "y": 0,
+      "resize_source": false,
+      "mask": ["2", 1]
+    }
+  },
+  "6": {
+    "class_type": "UpscaleModelLoader",
+    "inputs": { "model_name": "4x-UltraSharp.pth" }
+  },
+  "7": {
+    "class_type": "ImageUpscaleWithModel",
+    "inputs": { "upscale_model": ["6", 0], "image": ["5", 0] }
+  },
+  "8": {
+    "class_type": "SaveImage",
+    "inputs": { "images": ["7", 0], "filename_prefix": "urun_studio" }
+  }
+}
