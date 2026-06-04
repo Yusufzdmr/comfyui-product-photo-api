@@ -206,11 +206,22 @@ comfyui-ecommerce-pipeline/
 ├─ bin/
 │  ├─ process-product.js    # CLI: tek görsel
 │  └─ batch.js              # CLI: klasör
+├─ custom-node/             # ComfyUI custom node örneği (Python)
+│  ├─ __init__.py
+│  └─ studio_nodes.py       # Studio Background Composite + Hex→Image node'ları
 ├─ examples/
 │  └─ workflow-product.json # API formatı örnek graph
 ├─ input/ · output/
 └─ .env.example
 ```
+
+### Bonus: ComfyUI Custom Node (Python)
+
+`custom-node/` altında, projedeki "stüdyo kompozit" adımını **ComfyUI içinde
+bir node** olarak sunan örnek bir Python paketi vardır
+(`Studio Background Composite` + `Hex Color → Image`). Böylece bu proje hem
+**backend orchestration** hem de **custom node geliştirme** yetkinliğini gösterir.
+Detay: [`custom-node/README.md`](custom-node/README.md).
 
 ---
 
