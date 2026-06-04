@@ -18,10 +18,14 @@ Node, vb.) doğrudan çağrılabilecek şekilde tasarlanmıştır.
 | Ham fotoğraf (girdi) | İşlenmiş stüdyo görseli (çıktı) |
 |:---:|:---:|
 | ![önce](docs/before.png) | ![sonra](docs/after.png) |
-| Dağınık arka plan, merkez dışı | Temiz beyaz stüdyo + 2x upscale |
+| Renkli/dağınık arka plan | Temiz beyaz stüdyo arka planı |
 
-> **GPU veya ComfyUI kurulumu olmadan** çalışan, dahili bir mock ComfyUI sunucusuna
-> karşı **gerçek pipeline'ı** uçtan uca koşturan bir demo dahildir:
+> Yukarıdaki görsel, **gerçek bir ComfyUI kurulumunda** (CPU modu) bu pipeline ile
+> üretilmiştir: rembg arka planı kaldırır, ürün düz beyaz stüdyo zeminine
+> yerleştirilir. Tek komut: `node bin/process-product.js input/urun.jpg`
+>
+> Ayrıca **GPU veya ComfyUI kurulumu olmadan** çalışan, dahili bir mock ComfyUI
+> sunucusuna karşı **aynı pipeline'ı** uçtan uca koşturan bir demo dahildir:
 >
 > ```bash
 > npm install
@@ -68,12 +72,17 @@ Workflow adımları (`src/workflows/productPhoto.js`):
 | Node | İşlev |
 |------|-------|
 | `LoadImage` | Yüklenen ürün görselini alır |
-| `Image Remove Background (rembg)` | Arka planı temizler (IMAGE + MASK) |
+| `Image Remove Background (rembg)` | Arka planı temizler → RGBA (saydam arka plan) |
+| `SplitImageWithAlpha` | RGBA'dan temiz RGB görüntüyü ayıklar |
+| `ImageToMask` (channel: alpha) | Alpha kanalından ürün (ön plan) maskesi üretir |
 | `GetImageSize+` | Orijinal ölçüyü okur |
 | `EmptyImage` | Düz renkli stüdyo arka planı üretir |
-| `ImageCompositeMasked` | Ürünü arka plan üzerine yerleştirir |
-| `UpscaleModelLoader` + `ImageUpscaleWithModel` | AI ile büyütme |
+| `ImageCompositeMasked` | Ürünü maskeyle arka plan üzerine yerleştirir |
+| `UpscaleModelLoader` + `ImageUpscaleWithModel` | (Opsiyonel) AI ile büyütme |
 | `SaveImage` | Sonucu kaydeder |
+
+> Bu graph, çalışan bir ComfyUI üzerinde `/object_info` ile **doğrulanmış** node
+> imzalarına göre kurulmuştur ve gerçek bir CPU kurulumunda uçtan uca test edilmiştir.
 
 ---
 
